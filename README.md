@@ -20,16 +20,16 @@ FrameAnimeDesk 是该 skill 的配套本地工具，用于查看和编辑分镜�
 需要先安装 [Codex](https://openai.com/codex/)。在 PowerShell 中执行：
 
 ```powershell
-git clone https://github.com/hy342736/FrameAnimeDesk.git
+git clone https://github.com/hy342736/FrameAnime-Storyboard.git
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.codex\skills" | Out-Null
-Copy-Item -Recurse -Force ".\FrameAnimeDesk\skills\frame-anime-storyboard" "$env:USERPROFILE\.codex\skills\frame-anime-storyboard"
+Copy-Item -Recurse -Force ".\FrameAnime-Storyboard\skills\frame-anime-storyboard" "$env:USERPROFILE\.codex\skills\frame-anime-storyboard"
 ```
 
 重新打开 Codex 后，可使用 `$frame-anime-storyboard`，并提供短篇文本或指定要改编的段落。
 
 ### 安装配套软件
 
-从 [Releases](https://github.com/hy342736/FrameAnimeDesk/releases/latest) 下载 `FrameAnimeDesk.exe`，双击启动。Windows SmartScreen 可能显示“未知发布者”，这是因为当前开源版本尚未购买代码签名证书。
+从 [Releases](https://github.com/hy342736/FrameAnime-Storyboard/releases/latest) 下载 `FrameAnimeDesk.exe`，双击启动。Windows SmartScreen 可能显示“未知发布者”，这是因为当前开源版本尚未购买代码签名证书。
 
 首次使用时先打开 FrameAnimeDesk。skill 会自动寻找本机正在运行的软件，不需要手动填写端口。使用镜像站通道时，需要在软件打开的浏览器窗口中登录自己的账号。
 
@@ -38,7 +38,7 @@ Copy-Item -Recurse -Force ".\FrameAnimeDesk\skills\frame-anime-storyboard" "$env
 需要 Python 3.12 和 Node.js：
 
 ```powershell
-cd FrameAnimeDesk
+cd FrameAnime-Storyboard
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
@@ -53,10 +53,18 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 
 以下示例由 `frame-anime-storyboard` 将故事整理为 2 个角色、14 个镜头的项目，再通过 FrameAnimeDesk 审核、调整和生成。
 
+### 镜头导演台
+
+![FrameAnimeDesk 镜头导演台](docs/images/director-console.png)
+
+### 角色库
+
+![FrameAnimeDesk 角色库](docs/images/character-library.png)
+
 ### 分镜板
 
 ![FrameAnimeDesk 分镜板](docs/images/storyboard-board.png)
 
-### 完整项目示例
+### 导出
 
-![FrameAnimeDesk 完整分镜项目示例](docs/images/storyboard-example.png)
+![FrameAnimeDesk 导出工作区](docs/images/export-workspace.png)
