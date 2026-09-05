@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "ink-v1",
+  "slug": "ink",
+  "display_name": "黑白水墨青年漫",
+  "version": 1,
+  "status": "ready",
+  "enabled": true,
+  "description": "黑白水墨青年漫画风格，强调粗犷墨线、飞白笔触、密集网点与高对比动态分镜。",
+  "recommended_for": ["热血动作", "悬疑与冲突", "严肃青年漫", "黑白漫画分镜"],
+  "references": {
+    "primary": {"file": "primary.png", "label": "主参考图", "role": "overall_style", "required": true, "enabled": true},
+    "auxiliary": [
+      {"file": "linework.png", "label": "线稿参考", "role": "linework", "enabled": true},
+      {"file": "lighting.png", "label": "光影参考", "role": "lighting", "enabled": true},
+      {"file": "background.png", "label": "背景参考", "role": "background", "enabled": true}
+    ]
+  },
+  "style_analysis": {
+    "linework": "Sharp, rugged sumi-e brush strokes with dry-brush and flying-white ink effects, strong dark outer contours, and dense heavy cross-hatching. Linework has visible hand-drawn force and varied ink density.",
+    "character_rendering": "Hard-edged seinen manga character design with sharp, imposing expressions and deeply articulated facial structure, posture, and muscular anatomy. Keep a clear black-and-white manga treatment rather than photographic or 3D character rendering.",
+    "coloring": "Pure monochrome rendering using traditional manga screentone, solid ink masses, white negative space, and ink-wash transitions for depth. No color, chromatic accents, or soft continuous tonal gradients.",
+    "background": "Dynamic perspective speed lines, radial action lines, ink droplets, splatter, and atmospheric motion traces reinforce explosive movement. Preserve readable spatial structure and unify the background with the foreground ink and screentone.",
+    "palette_lighting": "Extreme black-and-white chiaroscuro with dense black shadows, strong white negative space, and selective high-value highlights. Lightning or energy effects appear as white highlights only when supported by the story.",
+    "composition": "Dynamic asymmetrical manga composition with diagonal panel edges, strong perspective, foreshortening, and a high-tension dominant panel. Action peaks may combine one large main panel with smaller reaction insets.",
+    "exclusions": "color, colorized, soft watercolor, pastel tones, cute chibi, flat cel shading, 3D render, CGI, smooth textureless finish, low contrast, western comic style, bad panel borders, blurry lines, text, watermark."
+  },
+  "compiled_prompt": "Dark seinen manga style, traditional sumi-e ink wash art, gritty heavy ink line art, sharp brush strokes, dry-brush effects, dense cross-hatching, high-contrast monochrome, traditional manga screentone texture, bold black shadow shapes, dramatic white highlights, dynamic radial speed lines, ink splatter particles, atmospheric motion traces, dynamic asymmetrical manga composition, strong foreshortening, clean readable panel borders.",
+  "negative_prompt": "color, colorized, colorful, pastel tones, soft watercolor, cute, chibi, flat cel shading, 3D render, CGI, smooth shading, glossy finish, low contrast, western comic style, blurry lines, bad panel borders, extra panels, text, gibberish speech bubbles, logo, watermark.",
+  "generation": {
+    "reference_strength_default": "standard",
+    "require_primary": true,
+    "max_auxiliary": 3,
+    "include_all_enabled_references": true,
+    "reference_order": ["primary", "linework", "lighting", "background"]
+  },
+  "asset_provenance": {
+    "source_type": "user_generated_ai_assets",
+    "distribution_review": "owner_approved_for_repository",
+    "usage_scope": "open_source_repository_and_release"
+  }
+}

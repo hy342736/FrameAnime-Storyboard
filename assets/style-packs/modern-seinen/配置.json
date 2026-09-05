@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "modern-seinen-v1",
+  "slug": "modern-seinen",
+  "display_name": "现代青年日漫",
+  "version": 1,
+  "status": "ready",
+  "enabled": true,
+  "description": "精致治愈系现代日漫电影静止帧，强调二维美型人物、电影式构图、通透背景和冷暖分区光。",
+  "recommended_for": [
+    "都市生活",
+    "校园与成长",
+    "现实情感",
+    "悬疑与安静叙事"
+  ],
+  "references": {
+    "primary": {
+      "file": "primary.png",
+      "label": "主参考图",
+      "role": "overall_style",
+      "required": true,
+      "enabled": true
+    },
+    "auxiliary": [
+      {
+        "file": "linework.png",
+        "label": "线稿参考",
+        "role": "linework",
+        "enabled": true
+      },
+      {
+        "file": "lighting.png",
+        "label": "光影参考",
+        "role": "lighting",
+        "enabled": true
+      },
+      {
+        "file": "background.png",
+        "label": "背景参考",
+        "role": "background",
+        "enabled": true
+      }
+    ]
+  },
+  "style_analysis": {
+    "linework": "Clean 2D anime hand-drawn line art. Clear, continuous, slightly weighted dark ink contours define the outer silhouette and structural edges; facial features and clothing folds remain precise and legible, with no painterly edges or 3D contour rendering.",
+    "character_rendering": "Refined modern seinen anime character design. Adult characters have natural balanced proportions but simplified 2D anime facial geometry: clean eye shapes, minimal nose and mouth marks, flat skin color, and restrained hard-edged shadows. Avoid deep facial creases, heavy eye sockets, pronounced philtrum lines, pores, and photographic facial structure.",
+    "coloring": "Pure Japanese anime cel shading. Large clean flat color areas with clear two- to three-level hard-edged shadows; no overly smooth gradients, painterly brushwork, or volumetric 3D lighting.",
+    "background": "Detailed Japanese hand-painted anime background art. Modern Japanese home entryways and streets use accurate perspective and clear depth separation, with a delicate watercolor or painted background texture that contrasts with the flat 2D characters.",
+    "palette_lighting": "Transparent modern Japanese anime film lighting. Low-saturation blue-gray and deep green establish the environment, with warm amber practical light creating clear cool-warm separation. Use crisp but restrained rim light and clean highlights; add window, rain, wet-ground reflections, or subtle glow only when supported by the scene.",
+    "composition": "Cinematic Japanese animation medium-shot language. Give the character expression and the surrounding space equal narrative purpose, with clear silhouettes, separated depth layers, and quiet controlled negative space.",
+    "exclusions": "3D render, CGI, live-action photo, painterly rendering, game-engine render, Octane Render, realistic skin texture, skin pores, plastic highlights, unlined characters, western comic style, live-action webtoon style, oversaturated colors, speech bubbles, readable text, watermark."
+  },
+  "compiled_prompt": "High-quality modern Japanese 2D hand-drawn anime film still. Pure cel animation texture with clear 2D ink linework, flat color blocks, and two- to three-level hard-edged shadows. Refined anime facial features and clean flat skin color remain consistent even in serious scenes. Use transparent low-saturation blue-gray and deep green environmental tones, warm amber practical light, restrained rim highlights, and clear cool-warm separation for a quiet cinematic narrative atmosphere.",
+  "negative_prompt": "3D render, CGI, live-action photo, painterly rendering, game-engine render, Octane Render, realistic skin texture, skin pores, plastic highlights, unlined characters, western comic style, live-action webtoon style, oversaturated colors, speech bubbles, readable text, watermark.",
+  "generation": {
+    "reference_strength_default": "standard",
+    "require_primary": true,
+    "max_auxiliary": 3,
+    "include_all_enabled_references": true,
+    "reference_order": [
+      "primary",
+      "linework",
+      "lighting",
+      "background"
+    ]
+  },
+  "asset_provenance": {
+    "source_type": "user_generated_ai_assets",
+    "distribution_review": "owner_approved_for_repository",
+    "usage_scope": "open_source_repository_and_release"
+  }
+}

@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "id": "jp-clean-v1",
+  "slug": "jp-clean",
+  "display_name": "日漫清洁气泡",
+  "description": "用于漫画成图后的对白、心理活动、旁白与强调文字排版，不发送给生图模型。",
+  "enabled": true,
+  "semantic_defaults": {
+    "dialogue": "speech-right",
+    "thought": "thought",
+    "narration": "caption",
+    "shout": "shout",
+    "sfx": "shout"
+  },
+  "assets": [
+    {
+      "id": "speech-right",
+      "label": "普通对白 · 右尾",
+      "semantic_type": "dialogue",
+      "file": "普通对白-右.png"
+    },
+    {
+      "id": "speech-left",
+      "label": "普通对白 · 左尾",
+      "semantic_type": "dialogue",
+      "file": "普通对白-左.png"
+    },
+    {
+      "id": "cheerful",
+      "label": "轻快对白",
+      "semantic_type": "dialogue",
+      "file": "轻快对白.png"
+    },
+    {
+      "id": "thought",
+      "label": "心理活动",
+      "semantic_type": "thought",
+      "file": "心理活动.png"
+    },
+    {
+      "id": "caption",
+      "label": "旁白框",
+      "semantic_type": "narration",
+      "file": "旁白框.png"
+    },
+    {
+      "id": "shout",
+      "label": "尖叫 / 强调",
+      "semantic_type": "shout",
+      "file": "尖叫.png"
+    },
+    {
+      "id": "d01",
+      "label": "D01 标准尖刺喊叫 · 右尾",
+      "semantic_type": "shout",
+      "file": "D01-标准尖刺喊叫气泡-右尾.png"
+    },
+    {
+      "id": "d02",
+      "label": "D02 标准尖刺喊叫 · 左尾",
+      "semantic_type": "shout",
+      "file": "D02-标准尖刺喊叫气泡-左尾.png"
+    },
+    {
+      "id": "d03",
+      "label": "D03 放射爆炸形",
+      "semantic_type": "shout",
+      "file": "D03-放射爆炸形气泡.png"
+    },
+    {
+      "id": "d04",
+      "label": "D04 粗短尖刺愤怒",
+      "semantic_type": "shout",
+      "file": "D04-粗短尖刺愤怒气泡.png"
+    },
+    {
+      "id": "d05",
+      "label": "D05 细密尖刺惊讶",
+      "semantic_type": "shout",
+      "file": "D05-细密尖刺惊讶气泡.png"
+    },
+    {
+      "id": "d06",
+      "label": "D06 不稳定恐慌",
+      "semantic_type": "shout",
+      "file": "D06-不稳定恐慌气泡.png"
+    },
+    {
+      "id": "d07",
+      "label": "D07 锯齿爆裂咆哮",
+      "semantic_type": "shout",
+      "file": "D07-锯齿爆裂咆哮气泡.png"
+    },
+    {
+      "id": "d08",
+      "label": "D08 云朵爆炸激动",
+      "semantic_type": "shout",
+      "file": "D08-云朵爆炸激动气泡.png"
+    },
+    {
+      "id": "d09",
+      "label": "D09 小型爆炸强调",
+      "semantic_type": "shout",
+      "file": "D09-小型爆炸强调气泡.png"
+    },
+    {
+      "id": "d10",
+      "label": "D10 大型尖刺无尾",
+      "semantic_type": "shout",
+      "file": "D10-大型尖刺无尾气泡.png"
+    },
+    {
+      "id": "e01",
+      "label": "E01 标准直角旁白框",
+      "semantic_type": "narration",
+      "file": "E01-标准直角旁白框.png"
+    },
+    {
+      "id": "e02",
+      "label": "E02 圆角旁白框",
+      "semantic_type": "narration",
+      "file": "E02-圆角旁白框.png"
+    },
+    {
+      "id": "e03",
+      "label": "E03 粗边说明框",
+      "semantic_type": "narration",
+      "file": "E03-粗边说明框.png"
+    },
+    {
+      "id": "e04",
+      "label": "E04 反白说明框结构",
+      "semantic_type": "narration",
+      "file": "E04-反白说明框结构.png"
+    },
+    {
+      "id": "e05",
+      "label": "E05 细长时间提示框",
+      "semantic_type": "narration",
+      "file": "E05-细长时间提示框.png"
+    },
+    {
+      "id": "e06",
+      "label": "E06 横向地点提示框",
+      "semantic_type": "narration",
+      "file": "E06-横向地点提示框.png"
+    },
+    {
+      "id": "e07",
+      "label": "E07 科技系统提示框",
+      "semantic_type": "narration",
+      "file": "E07-科技系统提示框.png"
+    },
+    {
+      "id": "e08",
+      "label": "E08 长句独白框",
+      "semantic_type": "narration",
+      "file": "E08-长句独白框.png"
+    },
+    {
+      "id": "f01",
+      "label": "F01 电话锯齿对白 · 右尾",
+      "semantic_type": "dialogue",
+      "file": "F01-电话锯齿对白-右尾.png"
+    },
+    {
+      "id": "f02",
+      "label": "F02 电话锯齿对白 · 左尾",
+      "semantic_type": "dialogue",
+      "file": "F02-电话锯齿对白-左尾.png"
+    },
+    {
+      "id": "f03",
+      "label": "F03 矩形锯齿广播",
+      "semantic_type": "dialogue",
+      "file": "F03-矩形锯齿广播气泡.png"
+    },
+    {
+      "id": "f04",
+      "label": "F04 机械对讲机声音框",
+      "semantic_type": "dialogue",
+      "file": "F04-机械对讲机声音框.png"
+    },
+    {
+      "id": "f05",
+      "label": "F05 电波屏幕外声音框",
+      "semantic_type": "dialogue",
+      "file": "F05-电波屏幕外声音框.png"
+    },
+    {
+      "id": "f06",
+      "label": "F06 机器人几何声音气泡",
+      "semantic_type": "dialogue",
+      "file": "F06-机器人几何声音气泡.png"
+    },
+    {
+      "id": "g01",
+      "label": "G01 小型害羞气泡",
+      "semantic_type": "dialogue",
+      "file": "G01-小型害羞气泡.png"
+    },
+    {
+      "id": "g02",
+      "label": "G02 下垂委屈气泡",
+      "semantic_type": "dialogue",
+      "file": "G02-下垂委屈气泡.png"
+    },
+    {
+      "id": "g03",
+      "label": "G03 压抑阴沉气泡",
+      "semantic_type": "dialogue",
+      "file": "G03-压抑阴沉气泡.png"
+    },
+    {
+      "id": "g04",
+      "label": "G04 扁长无语气泡",
+      "semantic_type": "dialogue",
+      "file": "G04-扁长无语气泡.png"
+    },
+    {
+      "id": "g05",
+      "label": "G05 花瓣撒娇气泡",
+      "semantic_type": "dialogue",
+      "file": "G05-花瓣撒娇气泡.png"
+    },
+    {
+      "id": "h01",
+      "label": "H01 上下双联对白气泡",
+      "semantic_type": "dialogue",
+      "file": "H01-上下双联对白气泡.png"
+    },
+    {
+      "id": "h02",
+      "label": "H02 左右双联对白气泡",
+      "semantic_type": "dialogue",
+      "file": "H02-左右双联对白气泡.png"
+    },
+    {
+      "id": "h03",
+      "label": "H03 三联对白气泡",
+      "semantic_type": "dialogue",
+      "file": "H03-三联对白气泡.png"
+    },
+    {
+      "id": "h04",
+      "label": "H04 多尾共语气泡",
+      "semantic_type": "dialogue",
+      "file": "H04-多尾共语气泡.png"
+    },
+    {
+      "id": "h05",
+      "label": "H05 群体声讨论气泡",
+      "semantic_type": "dialogue",
+      "file": "H05-群体声讨论气泡.png"
+    }
+  ],
+  "asset_provenance": {
+    "source_type": "user_generated_ai_assets",
+    "distribution_review": "owner_approved_for_repository",
+    "usage_scope": "open_source_repository_and_release"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "commercial-anime-v1",
+  "slug": "commercial-anime",
+  "display_name": "清透商业动画",
+  "version": 1,
+  "status": "ready",
+  "enabled": true,
+  "description": "明亮清晰的商业彩色动画风格，强调清楚的人物轮廓、活泼表情、简洁赛璐璐上色和青春群像氛围。",
+  "recommended_for": [
+    "校园日常",
+    "轻喜剧",
+    "青春群像"
+  ],
+  "references": {
+    "primary": {
+      "file": "primary.jpg",
+      "label": "主参考图",
+      "role": "overall_style",
+      "required": true,
+      "enabled": true
+    },
+    "auxiliary": [
+      {
+        "file": "linework.jpg",
+        "label": "线稿参考",
+        "role": "linework",
+        "enabled": true
+      },
+      {
+        "file": "lighting.jpg",
+        "label": "光影参考",
+        "role": "lighting",
+        "enabled": true
+      },
+      {
+        "file": "background.jpg",
+        "label": "背景参考",
+        "role": "background",
+        "enabled": true
+      }
+    ]
+  },
+  "style_analysis": {
+    "linework": "Clean and stable TV anime hand-drawn line art. Even, crisp line weight, clear outer contours, simplified facial features and hair strands, polished commercial 2D animation character draft quality.",
+    "character_rendering": "Classic Japanese moe school anime character design. Lively expressive anime eyes, clear simplified 2D facial features, highly recognizable hairstyles and casual or school uniforms, youthful energy and readable expressions.",
+    "coloring": "Pure 2D anime cel shading. Large clean flat color areas with exactly two levels of hard-edged shadow; clean skin color, no soft gradient volume shading and no painterly brushwork.",
+    "background": "Detailed and believable Japanese 2D anime background art. Accurate perspective in modern streets, train platforms, school classrooms and small live venues, with a hand-painted watercolor feel and clear depth separation from flat-colored characters.",
+    "palette_lighting": "Bright and transparent slice-of-life anime lighting. Fresh pink, yellow and blue accents with warm evening backlight or clear daylight, creating an airy youthful atmosphere.",
+    "composition": "Lived-in medium shots and ensemble stills with natural gestures and clear interaction. Restrained, clean framing that feels like a captured moment from a TV anime episode.",
+    "exclusions": "3D, CGI, live-action photo, realistic skin texture, 3D rendering, painterly rendering, western comic style, soft continuous volume shading, gloomy colors, deformed hands, blurry linework, existing anime characters, subtitles, speech bubbles, logo, watermark."
+  },
+  "compiled_prompt": "Authentic modern Japanese TV anime still, slice-of-life anime. Minimal clean dark hand-drawn line art, pure flat cel shading, large color blocks and two levels of crisp hard-edged shadows. Lively anime eyes, simplified 2D facial features and highly recognizable youthful clothing. Bright transparent pink, yellow and blue accents with clear daylight or warm gentle backlight, set against accurately drawn modern Japanese school and city backgrounds with a hand-painted feel.",
+  "negative_prompt": "3D, CGI, live-action photo, photorealistic staging, realistic skin texture, pores, 3D rendering, soft continuous volume shading, painterly rendering, western comic style, live-action webtoon style, gloomy colors, soft gradient skin, unlined characters, deformed hands, blurry linework, existing anime characters, subtitles, speech bubbles, readable text, logo, watermark, page number, brand mark",
+  "generation": {
+    "reference_strength_default": "standard",
+    "require_primary": true,
+    "max_auxiliary": 3,
+    "include_all_enabled_references": true,
+    "reference_order": [
+      "primary",
+      "linework",
+      "lighting",
+      "background"
+    ]
+  },
+  "asset_provenance": {
+    "source_type": "user_generated_ai_assets",
+    "distribution_review": "owner_approved_for_repository",
+    "usage_scope": "open_source_repository_and_release"
+  }
+}

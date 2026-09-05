@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "packs": [
+    {
+      "id": "modern-seinen-v1",
+      "directory": "modern-seinen",
+      "manifest": "配置.json",
+      "enabled": true
+    },
+    {
+      "id": "webtoon-vibrant-v1",
+      "directory": "webtoon-vibrant",
+      "manifest": "配置.json",
+      "enabled": true
+    },
+    {
+      "id": "commercial-anime-v1",
+      "directory": "commercial-anime",
+      "manifest": "配置.json",
+      "enabled": true
+    },
+    {
+      "id": "ink-v1",
+      "directory": "ink",
+      "manifest": "配置.json",
+      "enabled": true
+    }
+  ]
+}

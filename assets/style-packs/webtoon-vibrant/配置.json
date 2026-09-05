@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "webtoon-vibrant-v1",
+  "slug": "webtoon-vibrant",
+  "display_name": "绚丽奇幻彩漫",
+  "version": 1,
+  "status": "ready",
+  "enabled": true,
+  "description": "明亮高饱和的奇幻彩色漫画风格，强调清晰线稿、鲜明人物造型、赛璐璐上色和通透的幻想环境。",
+  "recommended_for": [
+    "奇幻冒险",
+    "轻幻想日常",
+    "魔法与异世界",
+    "明快群像故事"
+  ],
+  "references": {
+    "primary": {
+      "file": "primary.png",
+      "label": "主参考图",
+      "role": "overall_style",
+      "required": true,
+      "enabled": true
+    },
+    "auxiliary": [
+      {
+        "file": "linework.png",
+        "label": "线稿参考",
+        "role": "linework",
+        "enabled": true
+      },
+      {
+        "file": "lighting.png",
+        "label": "光影参考",
+        "role": "lighting",
+        "enabled": true
+      },
+      {
+        "file": "background.png",
+        "label": "背景参考",
+        "role": "background",
+        "enabled": true
+      }
+    ]
+  },
+  "style_analysis": {
+    "linework": "Fine, elegant 2D Japanese anime ink linework. Smooth clear outer contours, light flowing hair strands, precise clothing folds and fantasy accessory construction, with explicit hand-drawn lines and no muddy painterly edges.",
+    "character_rendering": "Standard Japanese fantasy anime character design. Clear lively anime eyes and refined facial features with balanced lightweight proportions; original adventurer or mage clothing has layered construction, sharp tailoring, and a distinct expressive personality.",
+    "coloring": "High-end Japanese anime cel shading and refined flat coloring. Clean defined color shapes with detailed two- to three-level hard-edged shadows; gems, metal, leather and sheer fabric use selective anime highlights rather than coarse material detail or 3D rendering.",
+    "background": "Beautiful expansive 2D hand-painted anime fantasy scenery. Clear blue sky, layered clouds, floating islands and pale-gold fantasy architecture use accurate perspective and open depth, integrating cleanly with the foreground character.",
+    "palette_lighting": "Transparent dreamlike Japanese fantasy anime lighting. Coral pink, teal green, ivory, warm gold and sky blue form a vivid but harmonious palette; magical particles and skill glows remain clear, airy and semi-transparent.",
+    "composition": "Energetic commercial anime wide or medium composition. Elegant character movement, magical effects and eye lines create clear narrative interaction; the image feels full while keeping the subject unmistakable.",
+    "exclusions": "3D render, CGI, photographic look, western painterly style, dark live-action mood, realistic skin texture, plastic mannequin, dirty brushwork, childish chibi, blurry facial features, existing anime or game characters, readable text, logo, watermark."
+  },
+  "compiled_prompt": "Top-tier Japanese 2D fantasy commercial illustration. Refined fantasy game character art and light-novel cover finish with delicate dark hand-drawn linework, high-quality anime cel shading, and two- to three-level hard-edged shadows. Original fantasy characters have refined facial features, lively expressions, and richly layered clothing. Use vivid transparent coral pink, teal green, ivory, warm gold and sky blue, with clear magical glow and expansive 2D anime fantasy backgrounds.",
+  "negative_prompt": "3D render, CGI, game-engine render, live-action photo, photographic look, western painterly style, dark live-action mood, realistic skin texture, plastic mannequin, coarse material detail, dirty brushwork, unlined characters, childish chibi, blurry facial features, muddy colors, effects covering the face, bad hands, empty background, existing anime or game characters, readable text, logo, watermark, page number, border.",
+  "generation": {
+    "reference_strength_default": "standard",
+    "require_primary": true,
+    "max_auxiliary": 3,
+    "include_all_enabled_references": true,
+    "reference_order": [
+      "primary",
+      "linework",
+      "lighting",
+      "background"
+    ]
+  },
+  "asset_provenance": {
+    "source_type": "user_generated_ai_assets",
+    "distribution_review": "owner_approved_for_repository",
+    "usage_scope": "open_source_repository_and_release"
+  }
+}

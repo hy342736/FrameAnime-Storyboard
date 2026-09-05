@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "packs": [
+    {
+      "id": "jp-clean-v1",
+      "directory": "jp-clean",
+      "manifest": "配置.json",
+      "enabled": true
+    }
+  ]
+}

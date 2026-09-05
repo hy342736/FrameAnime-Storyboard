@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#47c9e5" />
+    <title>FRAME 动画视觉工作台</title>
+    <link rel="icon" type="image/png" href="/assets/app-icon.png?v=16" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css?v=24" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true"><img src="/assets/app-icon.png?v=16" alt="" /></div>
+          <div>
+            <div class="brand-name">FRAME</div>
+            <div class="brand-caption">动画视觉工作台</div>
+          </div>
+        </div>
+
+        <div class="project-block">
+          <div class="eyebrow" id="projectIndex">项目 01</div>
+          <div class="project-switcher"><select id="projectSelect" aria-label="切换项目"></select><button class="icon-button sidebar-icon" id="newProjectButton" title="新建项目"><i data-lucide="plus"></i></button></div>
+          <div class="project-name" id="projectName">星落纪元 / 零号机</div>
+          <div class="project-meta" id="saveStatus" data-save-state="saved"><span class="save-status-dot"></span><span id="saveStatusText">已保存</span></div>
+          <div class="project-actions"><button class="quiet-button" id="renameProjectButton" title="重命名当前项目"><i data-lucide="pencil"></i><span>重命名</span></button><button class="quiet-button danger-text" id="deleteProjectButton" title="删除当前项目"><i data-lucide="trash-2"></i><span>删除</span></button></div>
+        </div>
+
+        <nav class="module-nav" aria-label="制作模块">
+          <div class="nav-heading">制作流程</div>
+          <button class="nav-item active" data-view="director"><i data-lucide="scan-line"></i><span>导演台</span><kbd>01</kbd></button>
+          <button class="nav-item" data-view="characters"><i data-lucide="users"></i><span>角色库</span><kbd>02</kbd></button>
+          <button class="nav-item" data-view="world"><i data-lucide="globe-2"></i><span>世界观</span><kbd>03</kbd></button>
+          <button class="nav-item" data-view="style"><i data-lucide="swatch-book"></i><span>艺术指导</span><kbd>04</kbd></button>
+          <button class="nav-item" data-view="storyboard"><i data-lucide="film"></i><span>分镜板</span><kbd>05</kbd></button>
+          <button class="nav-item" data-view="export"><i data-lucide="package-open"></i><span>导出</span><kbd>06</kbd></button>
+          <button class="nav-item" data-view="settings"><i data-lucide="settings-2"></i><span>设置</span><kbd>07</kbd></button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="skill-card project-overview">
+            <div class="skill-card-top"><span>项目概览</span><i data-lucide="layout-dashboard"></i></div>
+            <div class="overview-metrics">
+              <span><strong id="overviewCharacterCount">0</strong><small>角色</small></span>
+              <span><strong id="overviewShotCount">0</strong><small>镜头</small></span>
+              <span><strong id="overviewReferenceCount">0</strong><small>参考图</small></span>
+            </div>
+          </div>
+          <button class="quiet-button" id="loginButton"><i data-lucide="log-in"></i><span>打开镜像站登录</span></button>
+        </div>
+      </aside>
+
+      <main class="main-stage">
+        <header class="topbar">
+          <div class="breadcrumbs"><span>当前项目</span><i data-lucide="chevron-right"></i><strong id="breadcrumbTitle">导演台</strong></div>
+          <div class="topbar-actions"><span class="connection-pill"><span class="live-dot"></span><span id="connectionText">生成通道待命</span></span><button class="icon-button" id="resetButton" title="重置当前项目"><i data-lucide="rotate-ccw"></i></button></div>
+        </header>
+        <div id="appContent"></div>
+      </main>
+    </div>
+    <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/app.js?v=24"></script>
+  </body>
+</html>
