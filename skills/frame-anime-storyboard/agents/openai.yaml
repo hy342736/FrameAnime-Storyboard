@@ -1,0 +1,4 @@
+interface:
+  display_name: "FrameAnime Storyboard Director"
+  short_description: "Turn short prose into FrameAnimeDesk comic shots"
+  default_prompt: "Use $frame-anime-storyboard to turn my short story into a reviewable FrameAnimeDesk storyboard project."
