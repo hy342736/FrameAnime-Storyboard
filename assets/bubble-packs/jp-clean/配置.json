@@ -12,6 +12,62 @@
     "shout": "shout",
     "sfx": "shout"
   },
+  "intent_defaults": {
+    "dialogue": {
+      "normal_right": "speech-right",
+      "normal_left": "speech-left",
+      "cheerful": "cheerful",
+      "phone_right": "f01",
+      "phone_left": "f02",
+      "broadcast": "f03",
+      "intercom": "f04",
+      "offscreen": "f05",
+      "robot": "f06",
+      "shy": "g01",
+      "aggrieved": "g02",
+      "gloomy": "g03",
+      "speechless": "g04",
+      "coquettish": "g05",
+      "linked_vertical": "h01",
+      "linked_horizontal": "h02",
+      "linked_three": "h03",
+      "group_shared": "h04",
+      "crowd": "h05"
+    },
+    "thought": {
+      "reflective": "thought"
+    },
+    "narration": {
+      "default": "caption",
+      "rectangular": "e01",
+      "rounded": "e02",
+      "bold": "e03",
+      "reversed": "e04",
+      "time": "e05",
+      "location": "e06",
+      "system": "e07",
+      "long": "e08"
+    },
+    "shout": {
+      "default": "shout",
+      "standard_right": "d01",
+      "standard_left": "d02",
+      "explosion": "d03",
+      "anger": "d04",
+      "surprise": "d05",
+      "panic": "d06",
+      "roar": "d07",
+      "excitement": "d08",
+      "emphasis_small": "d09",
+      "large_tailless": "d10"
+    },
+    "sfx": {
+      "emphasis_small": "d09",
+      "explosion": "d03",
+      "impact": "d10",
+      "excitement": "d08"
+    }
+  },
   "assets": [
     {
       "id": "speech-right",

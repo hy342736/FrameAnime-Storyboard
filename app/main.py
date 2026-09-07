@@ -4,6 +4,7 @@ import mimetypes
 from pathlib import Path
 import re
 from typing import Any
+from uuid import uuid4
 
 from fastapi import FastAPI, File, Form, Header, HTTPException, Query, Request, UploadFile
 from fastapi.responses import FileResponse
@@ -23,7 +24,7 @@ from .runtime import (
     is_packaged,
     resource_path,
 )
-from .storage import RevisionConflictError, WorkspaceStorage, safe_child
+from .storage import RevisionConflictError, WorkspaceStorage, safe_child, utc_now
 from .storyboard_import import MAX_PANEL_BUDGET, apply_manifest, patch_shot, validate_manifest
 from .style_packs import StylePackError, StylePackLibrary
 
@@ -1215,12 +1216,41 @@ async def generate(
             generation_warning = "；".join(
                 warning for warning in (generation_warning, missing_binding_warning) if warning
             )
+    image_url = f"/images/{relative_output}"
+    project_revision = None
+    persistence_warning = ""
+    persist_generation = getattr(storage, "record_generation_result", None)
+    if project is not None and request.shot_id and callable(persist_generation):
+        generation_record = {
+            "id": uuid4().hex,
+            "shotId": request.shot_id,
+            "url": image_url,
+            "createdAt": utc_now(),
+            "prompt": effective_prompt,
+            "generationMode": generation_mode,
+            "generationChannel": generation_channel,
+            "generationModel": generation_model,
+            "aspectRatio": request.aspect_ratio,
+            "resolution": request.resolution,
+            "characterIds": selected_character_ids,
+            "referenceIds": request.reference_ids,
+            "stylePackId": style_pack_id,
+        }
+        try:
+            persisted = persist_generation(request.project_id, request.shot_id, generation_record)
+            project_revision = persisted["revision"]
+        except (KeyError, ValueError, OSError) as exc:
+            persistence_warning = f"图片已生成，但镜头引用保存失败：{exc}"
+    generation_warning = "；".join(
+        warning for warning in (generation_warning, persistence_warning) if warning
+    )
     return {
         "prompt": effective_prompt,
         "filename": output.path.name,
         "project_id": request.project_id,
         "shot_id": request.shot_id,
-        "url": f"/images/{relative_output}",
+        "url": image_url,
+        "project_revision": project_revision,
         "references_requested": str(output.references_requested),
         "references_attached": str(output.references_attached),
         "style_pack_id": style_pack_id,

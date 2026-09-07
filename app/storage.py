@@ -217,6 +217,51 @@ class WorkspaceStorage:
             self._write_workspace()
             return self._project_public(project, include_state=True)
 
+    def record_generation_result(
+        self,
+        project_id: str,
+        shot_id: str,
+        record: dict[str, Any],
+    ) -> dict[str, Any]:
+        """Persist a successful image before the frontend receives the response."""
+
+        validate_id(project_id, "项目 ID")
+        validate_id(shot_id, "镜头 ID")
+        image_url = str(record.get("url", "")).strip()
+        if not image_url:
+            raise ValueError("生成记录缺少图片地址")
+        with self._lock:
+            project = self._workspace["projects"].get(project_id)
+            if project is None:
+                raise KeyError(project_id)
+            state = project.get("state") or {}
+            shots = state.get("shots") if isinstance(state, dict) else None
+            shot = next(
+                (item for item in shots or [] if isinstance(item, dict) and item.get("id") == shot_id),
+                None,
+            )
+            if shot is None:
+                raise KeyError(shot_id)
+            content = shot.get("content")
+            if not isinstance(content, dict):
+                content = {}
+                shot["content"] = content
+            history = content.get("generationHistory")
+            if not isinstance(history, list):
+                history = []
+            content["lastImage"] = image_url
+            content["generationHistory"] = [
+                deepcopy(record),
+                *(item for item in history if not isinstance(item, dict) or item.get("url") != image_url),
+            ][:30]
+            shot["status"] = "待确认"
+            actual_revision = max(1, int(project.get("revision", 1)))
+            project["state"] = state
+            project["revision"] = actual_revision + 1
+            project["updated_at"] = utc_now()
+            self._write_workspace()
+            return self._project_public(project, include_state=True)
+
     def delete_project(self, project_id: str) -> None:
         validate_id(project_id, "项目 ID")
         with self._lock:

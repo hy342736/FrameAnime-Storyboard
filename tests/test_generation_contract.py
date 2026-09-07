@@ -93,6 +93,73 @@ class CharacterReferenceStorage:
 
 
 class GenerationContractTests(unittest.IsolatedAsyncioTestCase):
+    async def test_successful_generation_persists_image_reference_without_frontend_save(self):
+        class PersistingApiClient:
+            def __init__(self, output):
+                self.output = output
+
+            def resolved_prompt_profile(self):
+                return "natural"
+
+            async def generate(self, *args, **kwargs):
+                return ApiGenerationResult(self.output)
+
+        class FailingBrowserSession:
+            async def generate(self, *args, **kwargs):
+                raise AssertionError("browser session must not be used in API mode")
+
+        with tempfile.TemporaryDirectory(prefix="anime-desk-persist-generation-") as directory:
+            root = Path(directory)
+            settings = Settings(
+                data_dir=root / "data",
+                mirror_url="",
+                mirror_chat_url="",
+                headless=True,
+                browser_profile_dir=root / "profile",
+                image_dir=root / "generated",
+                reference_dir=root / "references",
+                generation_timeout_seconds=60,
+                local_api_key="",
+                generation_mode="api",
+                image_api_name="Test API",
+                image_api_model="test-model",
+                image_api_prompt_profile="natural",
+            )
+            settings.image_dir.mkdir(parents=True)
+            settings.reference_dir.mkdir(parents=True)
+            storage = WorkspaceStorage(settings)
+            project = storage.create_project("持久化测试", state={
+                "promptProfile": "natural",
+                "artDirection": {"locked": False},
+                "shots": [{
+                    "id": "SHOT-001",
+                    "status": "待制作",
+                    "content": {"lastImage": "", "generationHistory": []},
+                }],
+            })
+            output = settings.image_dir / project["id"] / "generated" / "result.png"
+            output.parent.mkdir(parents=True)
+            output.write_bytes(b"\x89PNG\r\n\x1a\nresult")
+            originals = (main.settings, main.storage, main.session, main.api_image_client)
+            main.settings = settings
+            main.storage = storage
+            main.session = FailingBrowserSession()
+            main.api_image_client = PersistingApiClient(output)
+            try:
+                result = await main.generate(main.GenerateRequest(
+                    prompt="draw",
+                    project_id=project["id"],
+                    shot_id="SHOT-001",
+                    aspect_ratio="3:4",
+                ))
+            finally:
+                main.settings, main.storage, main.session, main.api_image_client = originals
+
+            reloaded = WorkspaceStorage(settings).get_project(project["id"])["state"]["shots"][0]
+            self.assertEqual(result["url"], reloaded["content"]["lastImage"])
+            self.assertEqual(result["url"], reloaded["content"]["generationHistory"][0]["url"])
+            self.assertEqual("待确认", reloaded["status"])
+
     async def test_mirror_generation_auto_binds_and_reuses_project_conversation(self):
         class BindingMirrorSession:
             def __init__(self, output):

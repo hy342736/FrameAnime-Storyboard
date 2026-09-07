@@ -29,6 +29,7 @@ vm.runInContext(`${source}\n;globalThis.__test = {
   autoLetteringLayout,
   normalizeLetteringLayout,
   letteringPreviewItems,
+  letteringAsset,
   normalizePanelLayout,
   dynamicExpressionInstruction,
   isAgentMultiPanelPrompt,
@@ -134,8 +135,17 @@ assert.equal(importedWithoutCharacters.characterId, "");
 
 context.__test.setBubblePacks([{
   id: "jp-clean-v1",
-  semantic_defaults: { dialogue: "speech-right" },
-  assets: [{ id: "speech-right", label: "对白", semantic_type: "dialogue", url: "bubble.png" }],
+  semantic_defaults: { dialogue: "speech-right", shout: "shout", narration: "caption" },
+  intent_defaults: { dialogue: { speechless: "g04", robot: "f06" }, shout: { anger: "d04" }, narration: { time: "e05" } },
+  assets: [
+    { id: "speech-right", label: "对白", semantic_type: "dialogue", url: "bubble.png" },
+    { id: "shout", label: "喊叫", semantic_type: "shout", url: "shout.png" },
+    { id: "caption", label: "旁白", semantic_type: "narration", url: "caption.png" },
+    { id: "g04", label: "无语", semantic_type: "dialogue", url: "g04.png" },
+    { id: "f06", label: "机器人", semantic_type: "dialogue", url: "f06.png" },
+    { id: "d04", label: "愤怒", semantic_type: "shout", url: "d04.png" },
+    { id: "e05", label: "时间", semantic_type: "narration", url: "e05.png" },
+  ],
 }]);
 const letteringState = context.__test.normalizeState({
   shotId: "SHOT-001",
@@ -155,6 +165,10 @@ assert.equal(previewItems.length, 2);
 assert.equal(previewItems[0].index, 0);
 assert.equal(previewItems[1].index, 1);
 assert.notEqual(previewItems[0].layout.y, previewItems[1].layout.y);
+assert.equal(context.__test.letteringAsset({ bubbleSemantic: "shout", text: "住手！", position: "top-left" }).id, "d04");
+assert.equal(context.__test.letteringAsset({ bubbleSemantic: "narration", text: "三天后", position: "top-left" }).id, "e05");
+assert.equal(context.__test.letteringAsset({ bubbleSemantic: "dialogue", text: "……", position: "top-right" }).id, "g04");
+assert.equal(context.__test.letteringAsset({ bubbleSemantic: "dialogue", bubbleIntent: "robot", text: "识别完成" }).id, "f06");
 
 letteringState.shots[0].postText.push({
   elementType: "text",

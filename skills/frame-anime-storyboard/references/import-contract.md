@@ -193,7 +193,8 @@ The template uses a non-numeric placeholder deliberately. Replace it with the co
           "position": "top-right",
           "style": "speech",
           "bubble_semantic": "dialogue",
-          "bubble_asset_id": ""
+          "bubble_intent": "anger",
+          "bubble_asset_id": "d04"
         }
       ],
       "text_safe_areas": ["top-right"],
@@ -282,7 +283,7 @@ The server assigns collision-free final IDs where needed and returns the mapping
 
 For a new project, `style_pack_id`, `style_prompt`, and `bubble_pack_id` are required by the Skill client. Read the live choices with `style-packs` and `bubble-packs`; never guess an ID from this example. `style_analysis`, `style_prompt`, and `style_negative_prompt` are editable project copies. Appending normally omits these fields so the project keeps its established art direction and lettering pack.
 
-`bubble_semantic` lets the Agent select dialogue, thought, narration, shout, or sound-effect intent. Leave `bubble_asset_id` empty for the project's bubble pack to choose its semantic default. Set it only when the user requests a particular bubble asset. Bubble fields are post-production metadata and are never sent to the image model.
+`bubble_semantic` records the broad dialogue, thought, narration, shout, or sound-effect category. Read the selected live pack's asset IDs and choose a concrete `bubble_asset_id` from emotion, voice source, text length, speaker count, tail direction, and scene purpose. `bubble_intent` may record the narrower intent and lets FrameAnimeDesk make the same choice when the concrete asset is omitted. Leave `bubble_asset_id` empty only for ordinary dialogue with no better specialized match; never vary assets randomly. Bubble fields are post-production metadata and are never sent to the image model.
 
 To create a custom style after the user confirms the images and analysis, prepare the profile JSON and call:
 

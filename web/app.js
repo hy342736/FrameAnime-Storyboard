@@ -239,6 +239,7 @@ function normalizeShot(shot = {}) {
     ...block,
     elementType: block.elementType || "image",
     bubbleSemantic: block.bubbleSemantic || ({ speech: "dialogue", thought: "thought", caption: "narration", sfx: "sfx" }[block.style] || block.kind || "dialogue"),
+    bubbleIntent: block.bubbleIntent || "",
     bubbleAssetId: block.bubbleAssetId || "",
     bubbleReferenceId: block.bubbleReferenceId || "",
     hidden: Boolean(block.hidden),
@@ -787,6 +788,47 @@ function shotStyleOptions(content) {
 function selectedBubblePack() { return bubblePacks.find(pack => pack.id === state.lettering.bubblePackId) || bubblePacks[0] || null; }
 function letteringReferences() { return referencesFor("lettering", "bubble-library"); }
 function letteringAssetValue(block) { return block.bubbleReferenceId ? `reference:${block.bubbleReferenceId}` : block.bubbleAssetId || ""; }
+function automaticBubbleIntent(block) {
+  const semantic = block.bubbleSemantic || block.kind || "dialogue";
+  const text = String(block.text || "").trim();
+  const position = block.position || "top-right";
+  if (block.bubbleIntent) return block.bubbleIntent;
+  if (semantic === "thought") return "reflective";
+  if (semantic === "narration") {
+    if (["系统", "任务", "警告", "提示", "连接", "识别"].some(word => text.includes(word))) return "system";
+    if (["天后", "年后", "小时后", "分钟后", "翌日", "第二天", "当晚", "清晨", "黄昏", "与此同时", "后来", "片刻后"].some(word => text.includes(word))) return "time";
+    if (["地点", "学校", "教室", "车站", "医院", "公园", "屋顶", "家中"].some(word => text.includes(word)) && text.length <= 18) return "location";
+    return text.length >= 28 ? "long" : "rounded";
+  }
+  if (semantic === "sfx") {
+    if (text.length <= 3) return "emphasis_small";
+    if (["！！", "!!", "——"].some(mark => text.includes(mark))) return "explosion";
+    return "impact";
+  }
+  if (semantic === "shout") {
+    if (["救命", "不要过来", "别过来", "糟了", "怎么办"].some(word => text.includes(word))) return "panic";
+    if (["住手", "闭嘴", "滚", "混蛋", "放开", "够了"].some(word => text.includes(word))) return "anger";
+    if (["？！", "!?", "?!"].some(mark => text.includes(mark)) || ["什么", "怎么会", "不可能"].some(word => text.includes(word))) return "surprise";
+    if (["！！", "!!", "——"].some(mark => text.includes(mark))) return "roar";
+    if (text.length <= 4) return "emphasis_small";
+    return position.includes("right") ? "standard_left" : "standard_right";
+  }
+  if ((text && [...text].every(char => "….。！？!? ".includes(char))) || ((text.includes("……") || text.includes("...")) && text.length <= 8)) return "speechless";
+  if (["哈哈", "嘿嘿", "太好了", "好呀", "当然啦"].some(word => text.includes(word))) return "cheerful";
+  if (["才不是", "别看", "笨蛋", "讨厌"].some(word => text.includes(word))) return "shy";
+  if (["为什么", "明明", "人家", "又不是"].some(word => text.includes(word))) return "aggrieved";
+  if (["算了", "没关系", "随便", "无所谓"].some(word => text.includes(word))) return "gloomy";
+  if (["好不好", "求你", "嘛", "啦", "哟"].some(word => text.includes(word))) return "coquettish";
+  if ((text.match(/\n/g) || []).length >= 2) return "linked_three";
+  if (text.includes("\n")) return "linked_vertical";
+  return position.includes("right") ? "normal_left" : "normal_right";
+}
+function automaticBubbleAssetId(block, pack = selectedBubblePack()) {
+  if (!pack) return "";
+  const semantic = block.bubbleSemantic || block.kind || "dialogue";
+  const intent = automaticBubbleIntent(block);
+  return pack.intent_defaults?.[semantic]?.[intent] || pack.semantic_defaults?.[semantic] || "";
+}
 function letteringAssetOptions(block, includeAuto = false) {
   const selected = letteringAssetValue(block);
   const builtIn = (selectedBubblePack()?.assets || []).map(asset => `<option value="${esc(asset.id)}" ${asset.id === selected ? "selected" : ""}>${esc(asset.label)}</option>`);
@@ -794,7 +836,8 @@ function letteringAssetOptions(block, includeAuto = false) {
     const value = `reference:${reference.id}`;
     return `<option value="${esc(value)}" ${value === selected ? "selected" : ""}>自定义 · ${esc(reference.file_name)}</option>`;
   });
-  return [includeAuto ? `<option value="" ${selected ? "" : "selected"}>按语义自动</option>` : "", ...builtIn, ...custom].join("");
+  const automatic = (selectedBubblePack()?.assets || []).find(asset => asset.id === automaticBubbleAssetId(block));
+  return [includeAuto ? `<option value="" ${selected ? "" : "selected"}>智能匹配${automatic ? ` · ${esc(automatic.label)}` : ""}</option>` : "", ...builtIn, ...custom].join("");
 }
 function setLetteringAsset(block, value) {
   if (!block) return;
@@ -813,7 +856,7 @@ function letteringAsset(block) {
   }
   const pack = selectedBubblePack();
   if (!pack) return null;
-  const assetId = block.bubbleAssetId || pack.semantic_defaults?.[block.bubbleSemantic || block.kind || "dialogue"] || "";
+  const assetId = block.bubbleAssetId || automaticBubbleAssetId(block, pack);
   return pack.assets?.find(asset => asset.id === assetId) || pack.assets?.[0] || null;
 }
 function letteringLayoutFor(block, index) {
@@ -839,7 +882,7 @@ function letteringLayoutEditor() {
   const asset = letteringAsset(block);
   if (!isText && (!pack || !asset)) return "";
   const layout = letteringLayoutFor(block, letteringEditorIndex);
-  const assetOptions = letteringAssetOptions(block);
+  const assetOptions = letteringAssetOptions(block, true);
   const presets = TEXT_POSITION_OPTIONS.map(item => `<button type="button" class="proof-preset ${block.position === item.value && !block.layout ? "is-active" : ""}" data-lettering-preset="${esc(item.value)}">${esc(item.label)}</button>`).join("");
   const bubbles = letteringPreviewItems(shot).map(item => {
     const selected = item.index === letteringEditorIndex;
@@ -1241,6 +1284,8 @@ async function generate(requestedShotId = "") {
     const data = await readResponse(response);
     if (!response.ok) throw new Error(data.detail || "生图代理返回错误");
     if (activeGenerations.get(requestKey) !== requestId) return;
+    const activeProject = projects.find(item => item.id === projectId);
+    if (activeProject && Number.isInteger(data.project_revision)) activeProject.revision = data.project_revision;
     content.lastImage = data.url;
     content.generationHistory.unshift({ id: `${Date.now()}`, requestId, shotId, url: data.url, createdAt: new Date().toISOString(), prompt: content.prompt, generationMode: data.generation_mode, generationChannel: data.generation_channel, generationModel: data.generation_model, aspectRatio: content.aspectRatio, resolution: content.resolution, characterIds: characters.map(item => item.id), referenceIds: refs.map(item => item.id), stylePackId: data.style_pack_id || "" });
     content.generationHistory = content.generationHistory.slice(0, 30);
@@ -1674,7 +1719,7 @@ document.addEventListener("change", event => {
   if (event.target.closest("#exportDuration")) { exportOptions.frame_duration_seconds = Number(event.target.value); return; }
   const styleLock = event.target.closest("#styleLockToggle"); if (styleLock) { state.artDirection.locked = styleLock.checked; saveState(); return; }
   const bubblePack = event.target.closest("#bubblePackSelect"); if (bubblePack) { state.lettering.bubblePackId = bubblePack.value; saveState(); render(); return; }
-  const semantic = event.target.closest("[data-post-semantic]"); if (semantic) { const block = getShot()?.postText?.[Number(semantic.dataset.postSemantic)]; if (block) { block.bubbleSemantic = semantic.value; block.bubbleAssetId = ""; block.bubbleReferenceId = ""; saveState(); render(); } return; }
+  const semantic = event.target.closest("[data-post-semantic]"); if (semantic) { const block = getShot()?.postText?.[Number(semantic.dataset.postSemantic)]; if (block) { block.bubbleSemantic = semantic.value; block.bubbleIntent = ""; block.bubbleAssetId = ""; block.bubbleReferenceId = ""; saveState(); render(); } return; }
   const position = event.target.closest("[data-post-position]"); if (position) { const block = getShot()?.postText?.[Number(position.dataset.postPosition)]; if (block) { block.position = position.value; block.layout = null; const shot = getShot(); if (!shot.textSafeAreas?.includes(position.value)) shot.textSafeAreas = [...(shot.textSafeAreas || []), position.value]; saveState(); render(); } return; }
   const bubble = event.target.closest("[data-post-bubble]"); if (bubble) { const block = getShot()?.postText?.[Number(bubble.dataset.postBubble)]; if (block) { setLetteringAsset(block, bubble.value); saveState(); } return; }
   const letteringAssetSelect = event.target.closest("#letteringAssetSelect"); if (letteringAssetSelect) { const block = currentLetteringBlock(); if (block) { setLetteringAsset(block, letteringAssetSelect.value); saveState(); render(); } return; }

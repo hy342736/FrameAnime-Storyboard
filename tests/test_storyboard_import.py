@@ -213,6 +213,7 @@ class StoryboardImportTests(unittest.TestCase):
             self.assertEqual("列车灯掠过时，她将信封递到寒色面前。", state["shots"][0]["source"]["anchor"])
             self.assertEqual("这封信给你。", state["shots"][0]["postText"][0]["text"])
             self.assertEqual("dialogue", state["shots"][0]["postText"][0]["bubbleSemantic"])
+            self.assertEqual("", state["shots"][0]["postText"][0]["bubbleIntent"])
             self.assertEqual(["top-right"], state["shots"][0]["textSafeAreas"])
             self.assertEqual("split_row_2", state["shots"][0]["layoutMeta"]["containerType"])
             self.assertEqual(80, state["shots"][0]["layoutMeta"]["gutterBottom"])

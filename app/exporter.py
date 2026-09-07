@@ -213,7 +213,7 @@ def compose_panel(
             continue
         position = str(block.get("position") or "top-right")
         custom_reference_id = str(block.get("bubbleReferenceId") or "")
-        asset_id = str(block.get("bubbleAssetId") or defaults.get(block.get("bubbleSemantic") or block.get("kind") or "dialogue") or "")
+        asset_id = bubble_library.resolve_asset_id(pack_id, block) if pack else ""
         if custom_reference_id:
             asset_path = lettering_asset_resolver(custom_reference_id) if lettering_asset_resolver else None
             if asset_path is None or not asset_path.is_file():

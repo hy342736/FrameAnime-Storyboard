@@ -1244,6 +1244,14 @@ body[data-active-view="settings"] .heading-index::after { content: "工作台设
 }
 .field input:hover, .field textarea:hover, .field select:hover { border-color: #8fcfdb; }
 .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(71,201,229,.12); }
+.library-form .field input:focus,
+.library-form .field textarea:focus,
+.library-form .field select:focus {
+  background: #263840;
+  color: #fff;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(71,201,229,.12);
+}
 .character-picker { background: #eff8fa; }
 .character-choice.is-selected { background: #e4fafc; border-color: var(--cyan); }
 .character-bindings { background: #fff8f5; border-color: #f4d4ca; border-left-color: var(--coral); }

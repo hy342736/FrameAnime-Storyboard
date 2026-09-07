@@ -461,6 +461,9 @@ def validate_manifest(manifest: dict[str, Any], *, require_project: bool | None 
             bubble_semantic = block.get("bubble_semantic", "")
             if bubble_semantic and bubble_semantic not in BUBBLE_SEMANTICS:
                 errors.append(f"{block_path}.bubble_semantic is invalid")
+            bubble_intent = block.get("bubble_intent", "")
+            if bubble_intent and not isinstance(bubble_intent, str):
+                errors.append(f"{block_path}.bubble_intent must be a string")
             bubble_asset_id = block.get("bubble_asset_id", "")
             if bubble_asset_id and not isinstance(bubble_asset_id, str):
                 errors.append(f"{block_path}.bubble_asset_id must be a string")
@@ -720,6 +723,13 @@ def validate_remote_resources(client: ApiClient, manifest: dict[str, Any]) -> No
         bubble_ids = {item.get("id") for item in bubbles if isinstance(item, dict)}
         if bubble_pack_id not in bubble_ids:
             raise ClientError(f"Selected bubble pack is unavailable: {bubble_pack_id}")
+        selected_pack = next(item for item in bubbles if isinstance(item, dict) and item.get("id") == bubble_pack_id)
+        asset_ids = {item.get("id") for item in selected_pack.get("assets", []) if isinstance(item, dict)}
+        for shot_index, shot in enumerate(manifest.get("shots") or []):
+            for text_index, block in enumerate(shot.get("post_text") or []):
+                asset_id = block.get("bubble_asset_id", "")
+                if asset_id and asset_id not in asset_ids:
+                    raise ClientError(f"shots[{shot_index}].post_text[{text_index}] selects an unavailable bubble asset: {asset_id}")
 
 
 def print_json(value: Any) -> None:

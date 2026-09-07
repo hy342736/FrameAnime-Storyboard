@@ -240,6 +240,7 @@ def validate_manifest(manifest: dict[str, Any], *, append: bool = False) -> dict
             semantic = block.get("bubble_semantic", "")
             if semantic and semantic not in BUBBLE_SEMANTICS:
                 raise ValueError("无效的气泡语义类型")
+            _text(block.get("bubble_intent", ""), "气泡细分意图", maximum=80)
             _text(block.get("bubble_asset_id", ""), "气泡样式 ID", maximum=80)
             if block.get("position") not in safe_areas:
                 raise ValueError("后期文字位置必须包含在文字安全区中")
@@ -301,6 +302,7 @@ def _shot_record(source: dict[str, Any], final_id: str, character_map: dict[str,
                 "bubbleSemantic": block.get("bubble_semantic") or {
                     "speech": "dialogue", "thought": "thought", "caption": "narration", "sfx": "sfx"
                 }.get(block.get("style"), "dialogue"),
+                "bubbleIntent": block.get("bubble_intent", ""),
                 "bubbleAssetId": block.get("bubble_asset_id", ""),
             }
             for block in source.get("post_text", [])
@@ -343,6 +345,7 @@ def _shot_record(source: dict[str, Any], final_id: str, character_map: dict[str,
     for block in record["postText"]:
         block.pop("speaker_id", None)
         block.pop("bubble_semantic", None)
+        block.pop("bubble_intent", None)
         block.pop("bubble_asset_id", None)
     return record
 
@@ -485,6 +488,7 @@ def patch_shot(state: dict[str, Any], shot_id: str, patch: dict[str, Any], allow
                 "bubbleSemantic": item.get("bubble_semantic") or {
                     "speech": "dialogue", "thought": "thought", "caption": "narration", "sfx": "sfx"
                 }.get(item.get("style"), "dialogue"),
+                "bubbleIntent": item.get("bubble_intent", ""),
                 "bubbleAssetId": item.get("bubble_asset_id", ""),
             }
             for item in data.pop("post_text")
@@ -492,6 +496,7 @@ def patch_shot(state: dict[str, Any], shot_id: str, patch: dict[str, Any], allow
         for item in shot["postText"]:
             item.pop("speaker_id", None)
             item.pop("bubble_semantic", None)
+            item.pop("bubble_intent", None)
             item.pop("bubble_asset_id", None)
     if "text_safe_areas" in data:
         shot["textSafeAreas"] = deepcopy(data.pop("text_safe_areas"))

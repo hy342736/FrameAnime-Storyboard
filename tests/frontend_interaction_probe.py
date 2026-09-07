@@ -399,6 +399,13 @@ def run_probe(url: str) -> dict:
             page.locator("[data-edit-character] h3").first.click()
             if page.locator("#characterFormSlot .library-form").count() != 1:
                 failures.append("character card did not open the editor")
+            else:
+                for selector in ("#newCharacterName", "#newCharacterRole", "#newCharacterPersonality"):
+                    field = page.locator(selector)
+                    field.focus()
+                    colors = field.evaluate("node => { const style = getComputedStyle(node); return { color: style.color, background: style.backgroundColor }; }")
+                    if colors["color"] == colors["background"]:
+                        failures.append(f"focused character field hides its text: {selector}")
 
         page.locator('.nav-item[data-view="settings"]').click()
         page.locator('[data-generation-mode="api"]').click()

@@ -177,6 +177,27 @@ class ProjectExportTests(unittest.TestCase):
         )
         self.assertNotEqual(plain_bytes, lettered.path.read_bytes())
 
+    def test_export_automatically_resolves_specialized_bubble(self):
+        self.project["state"]["shots"] = [self.project["state"]["shots"][0]]
+        block = {
+            "kind": "dialogue",
+            "text": "住手！",
+            "position": "top-left",
+            "bubbleSemantic": "shout",
+            "bubbleAssetId": "",
+        }
+        self.project["state"]["shots"][0]["postText"] = [block]
+        automatic = export_project(
+            self.project, self.image_root, self.bubbles,
+            ExportOptions("vertical_comic", include_lettering=True, width=640),
+        ).path.read_bytes()
+        block["bubbleAssetId"] = "d04"
+        explicit = export_project(
+            self.project, self.image_root, self.bubbles,
+            ExportOptions("vertical_comic", include_lettering=True, width=640),
+        ).path.read_bytes()
+        self.assertEqual(explicit, automatic)
+
     def test_project_custom_bubble_is_used_by_export(self):
         self.project["state"]["shots"] = [self.project["state"]["shots"][0]]
         self.project["state"]["shots"][0]["postText"] = [{

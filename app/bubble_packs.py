@@ -49,6 +49,23 @@ class BubblePackLibrary:
             raise BubblePackError("气泡样式不存在")
         return safe_child(self.root, pack["slug"], asset["file"])
 
+    def resolve_asset_id(self, pack_id: str, block: dict[str, Any]) -> str:
+        pack = self.get_pack(pack_id)
+        if pack is None:
+            raise BubblePackError("气泡包不存在或未启用")
+        asset_ids = {item["id"] for item in pack["assets"]}
+        explicit = str(block.get("bubbleAssetId") or block.get("bubble_asset_id") or "").strip()
+        if explicit:
+            if explicit not in asset_ids:
+                raise BubblePackError(f"气泡样式不存在：{explicit}")
+            return explicit
+        semantic = str(block.get("bubbleSemantic") or block.get("bubble_semantic") or block.get("kind") or "dialogue")
+        intent = str(block.get("bubbleIntent") or block.get("bubble_intent") or "").strip() or infer_bubble_intent(block, semantic)
+        intended = ((pack.get("intent_defaults") or {}).get(semantic) or {}).get(intent)
+        fallback = (pack.get("semantic_defaults") or {}).get(semantic)
+        asset_id = intended or fallback or ""
+        return asset_id if asset_id in asset_ids else ""
+
     def _validate_manifest(self, manifest: dict[str, Any], directory: str) -> None:
         if manifest.get("schema_version") != 1 or manifest.get("slug") != directory:
             raise BubblePackError(f"气泡配置格式无效：{directory}")
@@ -56,8 +73,11 @@ class BubblePackLibrary:
             raise BubblePackError(f"气泡配置文字字段无效：{directory}")
         assets = manifest.get("assets")
         defaults = manifest.get("semantic_defaults")
+        intent_defaults = manifest.get("intent_defaults", {})
         if not isinstance(assets, list) or not assets or not isinstance(defaults, dict):
             raise BubblePackError(f"气泡资源配置无效：{directory}")
+        if not isinstance(intent_defaults, dict):
+            raise BubblePackError(f"气泡意图映射无效：{directory}")
         ids = set()
         for asset in assets:
             if not isinstance(asset, dict) or not all(isinstance(asset.get(key), str) and asset[key] for key in ("id", "label", "semantic_type", "file")):
@@ -70,6 +90,9 @@ class BubblePackLibrary:
                 raise BubblePackError(f"气泡图片不存在：{asset['file']}")
         if any(value not in ids for value in defaults.values()):
             raise BubblePackError(f"气泡默认映射无效：{directory}")
+        for semantic, mapping in intent_defaults.items():
+            if not isinstance(semantic, str) or not isinstance(mapping, dict) or any(value not in ids for value in mapping.values()):
+                raise BubblePackError(f"气泡意图映射无效：{directory}")
 
     @staticmethod
     def _read_json(path: Path, label: str) -> dict[str, Any]:
@@ -86,3 +109,58 @@ class BubblePackLibrary:
         if not isinstance(value, str) or not value or Path(value).name != value or value in {".", ".."}:
             raise BubblePackError(f"{label}无效")
         return value
+
+
+def infer_bubble_intent(block: dict[str, Any], semantic: str | None = None) -> str:
+    semantic = semantic or str(block.get("bubbleSemantic") or block.get("bubble_semantic") or block.get("kind") or "dialogue")
+    text = str(block.get("text") or "").strip()
+    position = str(block.get("position") or "top-right")
+
+    if semantic == "thought":
+        return "reflective"
+    if semantic == "narration":
+        if any(word in text for word in ("系统", "任务", "警告", "提示", "连接", "识别")):
+            return "system"
+        if any(word in text for word in ("天后", "年后", "小时后", "分钟后", "翌日", "第二天", "当晚", "清晨", "黄昏", "与此同时", "后来", "片刻后")):
+            return "time"
+        if any(word in text for word in ("地点", "学校", "教室", "车站", "医院", "公园", "屋顶", "家中")) and len(text) <= 18:
+            return "location"
+        if len(text) >= 28:
+            return "long"
+        return "rounded"
+    if semantic == "sfx":
+        if len(text) <= 3:
+            return "emphasis_small"
+        if any(mark in text for mark in ("！！", "!!", "——")):
+            return "explosion"
+        return "impact"
+    if semantic == "shout":
+        if any(word in text for word in ("救命", "不要过来", "别过来", "糟了", "怎么办")):
+            return "panic"
+        if any(word in text for word in ("住手", "闭嘴", "滚", "混蛋", "放开", "够了")):
+            return "anger"
+        if any(mark in text for mark in ("？！", "!?", "!?", "?!")) or any(word in text for word in ("什么", "怎么会", "不可能")):
+            return "surprise"
+        if any(mark in text for mark in ("！！", "!!", "——")):
+            return "roar"
+        if len(text) <= 4:
+            return "emphasis_small"
+        return "standard_left" if "right" in position else "standard_right"
+
+    if (set(text) <= set("….。！？!? ") and text) or (("……" in text or "..." in text) and len(text) <= 8):
+        return "speechless"
+    if any(word in text for word in ("哈哈", "嘿嘿", "太好了", "好呀", "当然啦")):
+        return "cheerful"
+    if any(word in text for word in ("才不是", "别看", "笨蛋", "讨厌")):
+        return "shy"
+    if any(word in text for word in ("为什么", "明明", "人家", "又不是")):
+        return "aggrieved"
+    if any(word in text for word in ("算了", "没关系", "随便", "无所谓")):
+        return "gloomy"
+    if any(word in text for word in ("好不好", "求你", "嘛", "啦", "哟")):
+        return "coquettish"
+    if text.count("\n") >= 2:
+        return "linked_three"
+    if text.count("\n") == 1:
+        return "linked_vertical"
+    return "normal_left" if "right" in position else "normal_right"
